@@ -103,7 +103,7 @@ input[type="text"]:focus{
 
 }
 
-.botao-principal.botao-principal:houver{
+.botao-principal.botao-principal:hover{
     background: var(--cor-primaria-destaque);
     transform: translateY(-2px);
 }
@@ -147,7 +147,7 @@ input[type="text"]:focus{
 }
 
 
-.botao-excluir:houver{
+.botao-excluir:hover{
     color: var(--cor-perigo);
 }
 
