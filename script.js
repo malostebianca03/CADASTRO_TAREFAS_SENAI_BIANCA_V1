@@ -8,19 +8,18 @@ const botaoTema = document.getElementById("boyao-slternar-tema");
 function adicionarTarefa() {
 const texto = campoTarefa.value.trim();
 
-
+// Verifica se a tarefa está vazia
 if (texto === "") {
     alert("A tarefa não pode estar vazia!");
     campoTarefa.focus();
     return;
 }
 
-
 // Criar tarefa
 const tarefa = document.createElement("li");
 tarefa.classList.add("item-tarefa");
 
-// Texto
+// Texto da tarefa
 const textoTarefa = document.createElement("span");
 textoTarefa.textContent = texto;
 
@@ -59,25 +58,28 @@ botaoExcluir.addEventListener("click", function () {
     atualizarContador();
 });
 
-// Montar tarefa
+// Colocar os botões dentro da área de ações
 acoes.appendChild(botaoConcluir);
 acoes.appendChild(botaoExcluir);
 
+// Montar a tarefa
 tarefa.appendChild(textoTarefa);
 tarefa.appendChild(acoes);
 
+// Adicionar tarefa à lista
 listaTarefas.appendChild(tarefa);
 
 // Limpar campo
 campoTarefa.value = "";
 campoTarefa.focus();
 
+// Atualizar contador
 atualizarContador();
 
 
 }
 
-// Contador
+// Atualizar contador
 function atualizarContador() {
 const quantidade =
 listaTarefas.querySelectorAll(".item-tarefa").length;
@@ -94,10 +96,10 @@ if (quantidade === 0) {
 
 }
 
-// Clique no botão adicionar
+// Botão adicionar
 botaoAdicionar.addEventListener("click", adicionarTarefa);
 
-// Pressionar Enter para adicionar
+// Adicionar apertando Enter
 campoTarefa.addEventListener("keydown", function (evento) {
 if (evento.key === "Enter") {
 adicionarTarefa();
@@ -108,15 +110,9 @@ adicionarTarefa();
 botaoTema.addEventListener("click", function () {
 document.body.classList.toggle("modo-escuro");
 
-const icone = botaoTema.querySelector("i");
-
-if (document.body.classList.contains("modo-escuro")) {
-    icone.classList.remove("fa-moon");
-    icone.classList.add("fa-sun");
-} else {
-    icone.classList.remove("fa-sun");
-    icone.classList.add("fa-moon");
-}
+// A lua permanece sempre no botão
+botaoTema.innerHTML =
+    '<i class="fa-solid fa-moon"></i>';
 
 
 });
