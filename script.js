@@ -4,29 +4,22 @@ const listaTarefas = document.getElementById("lista-tarefas");
 const contadorTarefas = document.getElementById("contador-tarefas");
 const botaoTema = document.getElementById("boyao-slternar-tema");
 
-// Carregar tarefas salvas
-let tarefas = JSON.parse(localStorage.getItem("tarefas")) || [];
+// Adicionar tarefa
+function adicionarTarefa() {
+const texto = campoTarefa.value.trim();
 
-// ================================
-// SALVAR TAREFAS
-// ================================
-function salvarTarefas() {
-localStorage.setItem("tarefas", JSON.stringify(tarefas));
+// Verifica se a tarefa está vazia
+if (texto === "") {
+    alert("A tarefa não pode estar vazia!");
+    campoTarefa.focus();
+    return;
 }
 
-// ================================
-// CRIAR TAREFA NA TELA
-// ================================
-function criarTarefa(texto, concluida = false) {
-
+// Criar tarefa
 const tarefa = document.createElement("li");
 tarefa.classList.add("item-tarefa");
 
-if (concluida) {
-    tarefa.classList.add("concluido");
-}
-
-// Texto
+// Texto da tarefa
 const textoTarefa = document.createElement("span");
 textoTarefa.textContent = texto;
 
@@ -37,31 +30,11 @@ acoes.classList.add("acoes-tarefa");
 // Botão concluir
 const botaoConcluir = document.createElement("button");
 botaoConcluir.classList.add("botao-acao");
+botaoConcluir.innerHTML = '<i class="fa-solid fa-check"></i>';
 botaoConcluir.title = "Concluir tarefa";
 
-if (concluida) {
-    botaoConcluir.innerHTML =
-        '<i class="fa-solid fa-rotate-left"></i>';
-} else {
-    botaoConcluir.innerHTML =
-        '<i class="fa-solid fa-check"></i>';
-}
-
 botaoConcluir.addEventListener("click", function () {
-
     tarefa.classList.toggle("concluido");
-
-    // Encontrar a tarefa no array
-    const indice = tarefas.findIndex(
-        item => item.texto === texto
-    );
-
-    if (indice !== -1) {
-        tarefas[indice].concluida =
-            tarefa.classList.contains("concluido");
-
-        salvarTarefas();
-    }
 
     if (tarefa.classList.contains("concluido")) {
         botaoConcluir.innerHTML =
@@ -76,98 +49,46 @@ botaoConcluir.addEventListener("click", function () {
 
 // Botão excluir
 const botaoExcluir = document.createElement("button");
-botaoExcluir.classList.add(
-    "botao-acao",
-    "botao-excluir"
-);
-
-botaoExcluir.innerHTML =
-    '<i class="fa-solid fa-trash"></i>';
-
+botaoExcluir.classList.add("botao-acao", "botao-excluir");
+botaoExcluir.innerHTML = '<i class="fa-solid fa-trash"></i>';
 botaoExcluir.title = "Excluir tarefa";
 
 botaoExcluir.addEventListener("click", function () {
-
     tarefa.remove();
-
-    const indice = tarefas.findIndex(
-        item => item.texto === texto
-    );
-
-    if (indice !== -1) {
-        tarefas.splice(indice, 1);
-        salvarTarefas();
-    }
-
     atualizarContador();
 });
 
-// Montar tarefa
+// Colocar os botões dentro da área de ações
 acoes.appendChild(botaoConcluir);
 acoes.appendChild(botaoExcluir);
 
+// Montar a tarefa
 tarefa.appendChild(textoTarefa);
 tarefa.appendChild(acoes);
 
+// Adicionar tarefa à lista
 listaTarefas.appendChild(tarefa);
-
-
-}
-
-// ================================
-// ADICIONAR TAREFA
-// ================================
-function adicionarTarefa() {
-
-const texto = campoTarefa.value.trim();
-
-if (texto === "") {
-    alert("A tarefa não pode estar vazia!");
-    campoTarefa.focus();
-    return;
-}
-
-// Adicionar no array
-tarefas.push({
-    texto: texto,
-    concluida: false
-});
-
-// Salvar no navegador
-salvarTarefas();
-
-// Mostrar na tela
-criarTarefa(texto);
 
 // Limpar campo
 campoTarefa.value = "";
 campoTarefa.focus();
 
+// Atualizar contador
 atualizarContador();
 
 
 }
 
-// ================================
-// CONTADOR
-// ================================
+// Atualizar contador
 function atualizarContador() {
-
 const quantidade =
-    listaTarefas.querySelectorAll(".item-tarefa").length;
+listaTarefas.querySelectorAll(".item-tarefa").length;
 
 if (quantidade === 0) {
-
-    contadorTarefas.textContent =
-        "0 tarefas na lista";
-
+    contadorTarefas.textContent = "0 tarefas na lista";
 } else if (quantidade === 1) {
-
-    contadorTarefas.textContent =
-        "1 tarefa na lista";
-
+    contadorTarefas.textContent = "1 tarefa na lista";
 } else {
-
     contadorTarefas.textContent =
         `${quantidade} tarefas na lista`;
 }
@@ -175,61 +96,26 @@ if (quantidade === 0) {
 
 }
 
-// ================================
-// BOTÃO ADICIONAR
-// ================================
-botaoAdicionar.addEventListener(
-"click",
-adicionarTarefa
-);
+// Botão adicionar
+botaoAdicionar.addEventListener("click", adicionarTarefa);
 
-// ================================
-// ENTER PARA ADICIONAR
-// ================================
-campoTarefa.addEventListener(
-"keydown",
-function (evento) {
-
-    if (evento.key === "Enter") {
-        adicionarTarefa();
-    }
-
+// Adicionar apertando Enter
+campoTarefa.addEventListener("keydown", function (evento) {
+if (evento.key === "Enter") {
+adicionarTarefa();
 }
+});
 
+// Modo escuro
+botaoTema.addEventListener("click", function () {
+document.body.classList.toggle("modo-escuro");
 
-);
-
-// ================================
-// MODO ESCURO
-// ================================
-botaoTema.addEventListener(
-"click",
-function () {
-
-    document.body.classList.toggle(
-        "modo-escuro"
-    );
-
-    // Mantém a lua
-    botaoTema.innerHTML =
-        '<i class="fa-solid fa-moon"></i>';
-}
-
-
-);
-
-// ================================
-// CARREGAR TAREFAS SALVAS
-// ================================
-tarefas.forEach(function (item) {
-
-criarTarefa(
-    item.texto,
-    item.concluida
-);
+// A lua permanece sempre no botão
+botaoTema.innerHTML =
+    '<i class="fa-solid fa-moon"></i>';
 
 
 });
 
-// Atualizar contador
+// Iniciar contador
 atualizarContador();
