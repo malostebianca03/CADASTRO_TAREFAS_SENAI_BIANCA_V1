@@ -147,16 +147,10 @@ function () {
             "modo-escuro"
         )
     ) {
-
-        // Entrou no modo escuro
-        // Agora aparece o SOL
         icone.classList.remove("fa-moon");
         icone.classList.add("fa-sun");
 
     } else {
-
-        // Voltou para o modo claro
-        // Agora aparece a LUA
         icone.classList.remove("fa-sun");
         icone.classList.add("fa-moon");
     }
